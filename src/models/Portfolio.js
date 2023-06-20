@@ -13,14 +13,19 @@ const portfolioSchema = new Schema({
         type:String,
         require:true
     },
-    user:{
-        type:String,
-        required:true
-    }
+    
+    user: {
+        type : String,
+        require : true
+    },
+    image:{
+        public_id:String,
+        secure_url:String
+    },
+    
+    
 },{
     timestamps:true
 })
-
-
 
 module.exports = model('portfolio',portfolioSchema)

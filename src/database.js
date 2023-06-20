@@ -2,7 +2,6 @@ const mongoose = require('mongoose')
 
 const MONGODB_URI = 'mongodb://0.0.0.0:27017/portafolio'
 
-
 connection = async()=>{
     try {
          await mongoose.connect(MONGODB_URI,{
@@ -18,4 +17,7 @@ connection = async()=>{
 module.exports = connection
 
 
+
 const {DBUSER,DBPASSWORD,DBNAME} = process.env
+
+

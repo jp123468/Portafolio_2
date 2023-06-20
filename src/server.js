@@ -1,12 +1,11 @@
-const express = require('express')
-const path = require('path');
-const {engine}=require('express-handlebars')
-const methodOverride = require('method-override');
 
+const express = require('express')
+const { engine }  = require('express-handlebars')
+const path = require('path');
+const methodOverride = require('method-override');
 const passport = require('passport');
 const session = require('express-session');
-
-
+const fileUpload = require('express-fileupload')
 
 // Inicializaciones
 const app = express()
@@ -22,10 +21,18 @@ app.engine('.hbs',engine({
     extname:'.hbs'
 }))
 app.set('view engine','.hbs')
+
+app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : './uploads'
+}));
+
+
+
+
 // Middlewares 
 app.use(express.urlencoded({extended:false}))
 app.use(methodOverride('_method'))
-
 app.use(session({ 
     secret: 'secret',
     resave:true,
@@ -34,17 +41,26 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session())
 
+
+// Rutas 
+app.use(require('./routers/user.routes'))
+app.use(require('./routers/portafolio.routes')) 
+app.use(require('./routers/index.routes')) 
+
+// Archivos estáticos
+app.use(express.static(path.join(__dirname,'public')))
+
+
+
 // Variables globales
 app.use((req,res,next)=>{
     res.locals.user = req.user?.name || null
     next()
 })
 
-// Rutas 
-app.use(require('./routers/index.routes'))
-app.use(require('./routers/portafolio.routes'))
-app.use(require('./routers/user.routes'))
-// Archivos estáticos
-app.use(express.static(path.join(__dirname,'public')))
 
-module.exports = app
+module.exports = app 
+
+
+
+
